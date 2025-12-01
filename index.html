@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌤️ Weather Dashboard - Tugas Akhir</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-cloud-sun-rain"></i> Weather Dashboard</h1>
+            </div>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <i class="fas fa-clock"></i>
+                    <span id="currentTime">Loading...</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Auto-update: 5 menit</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- LEFT PANEL -->
+            <div class="left-panel">
+                <!-- SEARCH & CONTROLS -->
+                <div class="card search-card">
+                    <div class="search-container">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                placeholder="Cari kota (contoh: Jakarta, London)..."
+                                autocomplete="off"
+                            >
+                            <button class="clear-btn" id="clearBtn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="suggestions-list" id="suggestionsList"></div>
+                        <div class="search-buttons">
+                            <button class="btn btn-search" id="searchBtn">
+                                <i class="fas fa-search"></i> Cari
+                            </button>
+                            <button class="btn btn-refresh" id="refreshBtn">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- FAVORITES -->
+                    <div class="favorites-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-star"></i> Kota Favorit</h3>
+                            <button class="btn-icon" id="addFavoriteBtn" title="Tambah ke favorit">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="favorites-grid" id="favoritesGrid"></div>
+                    </div>
+
+                    <!-- CONTROLS -->
+                    <div class="controls-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-cog"></i> Pengaturan</h3>
+                        </div>
+                        <div class="controls-grid">
+                            <div class="control-group">
+                                <label><i class="fas fa-thermometer-half"></i> Satuan Suhu</label>
+                                <div class="toggle-group">
+                                    <button class="toggle-btn active" id="celsiusBtn">°C</button>
+                                    <button class="toggle-btn" id="fahrenheitBtn">°F</button>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label><i class="fas fa-palette"></i> Tema</label>
+                                <div class="toggle-group">
+                                    <button class="toggle-btn active" id="lightThemeBtn">
+                                        <i class="fas fa-sun"></i> Terang
+                                    </button>
+                                    <button class="toggle-btn" id="darkThemeBtn">
+                                        <i class="fas fa-moon"></i> Gelap
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label><i class="fas fa-bell"></i> Notifikasi</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="notificationToggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CURRENT WEATHER DETAILS -->
+                <div class="card details-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-info-circle"></i> Detail Cuaca</h3>
+                    </div>
+                    <div class="details-grid" id="weatherDetails">
+                        <!-- Weather details will be filled by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL -->
+            <div class="right-panel">
+                <!-- CURRENT WEATHER -->
+                <div class="card current-weather-card">
+                    <div class="weather-header">
+                        <div class="location-info">
+                            <h2 id="cityName">Jakarta, ID</h2>
+                            <p class="timestamp" id="lastUpdate">Last update: Loading...</p>
+                        </div>
+                        <div class="weather-icon-large" id="weatherIcon">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="weather-main">
+                        <div class="temperature">
+                            <span class="temp-value" id="temperature">28</span>
+                            <span class="temp-unit" id="tempUnit">°C</span>
+                        </div>
+                        <div class="weather-condition" id="weatherCondition">Cerah</div>
+                    </div>
+
+                    <div class="weather-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="feature-content">
+                                <div class="feature-value" id="humidity">65%</div>
+                                <div class="feature-label">Kelembapan</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-wind"></i>
+                            </div>
+                            <div class="feature-content">
+                                <div class="feature-value" id="windSpeed">12 km/jam</div>
+                                <div class="feature-label">Kecepatan Angin</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-temperature-low"></i>
+                            </div>
+                            <div class="feature-content">
+                                <div class="feature-value" id="feelsLike">30°C</div>
+                                <div class="feature-label">Terasa Seperti</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="feature-content">
+                                <div class="feature-value" id="visibility">10 km</div>
+                                <div class="feature-label">Jarak Pandang</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5-DAY FORECAST -->
+                <div class="card forecast-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Prediksi 5 Hari</h3>
+                        <div class="date-range" id="forecastRange"></div>
+                    </div>
+                    <div class="forecast-container" id="forecastContainer">
+                        <!-- Forecast will be filled by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- ADDITIONAL INFO -->
+                <div class="additional-info">
+                    <div class="info-card">
+                        <div class="info-header">
+                            <i class="fas fa-sunrise"></i>
+                            <h4>Matahari</h4>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-item">
+                                <span>Terbit</span>
+                                <strong id="sunrise">06:00</strong>
+                            </div>
+                            <div class="info-item">
+                                <span>Terbenam</span>
+                                <strong id="sunset">18:00</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-header">
+                            <i class="fas fa-chart-line"></i>
+                            <h4>Tekanan & UV</h4>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-item">
+                                <span>Tekanan</span>
+                                <strong id="pressure">1013 hPa</strong>
+                            </div>
+                            <div class="info-item">
+                                <span>Indeks UV</span>
+                                <strong id="uvIndex">5</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p><i class="fas fa-database"></i> Data oleh: <strong>OpenWeatherMap API</strong></p>
+                    <p><i class="fas fa-code"></i> Dibuat untuk: <strong>Tugas Akhir Pemrograman Web</strong></p>
+                </div>
+                <div class="footer-stats">
+                    <div class="stat">
+                        <i class="fas fa-cloud"></i>
+                        <span>Update berikutnya: <span id="nextUpdate">5:00</span></span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-history"></i>
+                        <span>Terakhir refresh: <span id="lastRefresh">-</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 Weather Dashboard - Tugas Praktikum AJAX & Web Service</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3>Memuat data cuaca...</h3>
+            <p id="loadingMessage">Mengambil informasi terkini</p>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ERROR MODAL -->
+    <div class="error-modal" id="errorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Terjadi Kesalahan</h3>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessage">Kota tidak ditemukan. Silakan coba lagi.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeErrorBtn">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD TO FAVORITES MODAL -->
+    <div class="modal" id="addFavoriteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> Tambah Kota Favorit</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="favoriteCityInput" placeholder="Masukkan nama kota...">
+                <div class="suggestions-list" id="favoriteSuggestions"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelFavoriteBtn">Batal</button>
+                <button class="btn btn-primary" id="saveFavoriteBtn">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
